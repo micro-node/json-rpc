@@ -4,11 +4,12 @@
   "description": "An RPC helper",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "lint": "eslint lib/*.js"
   },
   "config": {
     "ghooks": {
-      "pre-commit": "eslint ./lib/*.js",
+      "pre-commit": "npm run lint",
       "post-merge": "npm install",
       "post-rewrite": "npm install"
     }
