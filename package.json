@@ -1,0 +1,38 @@
+{
+  "name": "micro-node-rpc",
+  "version": "1.0.0",
+  "description": "An RPC helper",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "config": {
+    "ghooks": {
+      "pre-commit": "eslint ./lib/*.js",
+      "post-merge": "npm install",
+      "post-rewrite": "npm install"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/micro-node/rpc.git"
+  },
+  "keywords": [
+    "rpc",
+    "micro-node"
+  ],
+  "author": "Haithem Bel Haj <haythem.belhaj@gmail.com> (http://haithembelhaj.github.io)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/micro-node/rpc/issues"
+  },
+  "homepage": "https://github.com/micro-node/rpc#readme",
+  "dependencies": {
+    "babel": "^5.8.23",
+    "lodash": "^3.10.1"
+  },
+  "devDependencies": {
+    "chai": "^3.3.0",
+    "ghooks": "^1.0.1"
+  }
+}
