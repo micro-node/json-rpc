@@ -1,9 +1,7 @@
-require("babel/register");
-
 var assert = require('assert');
 var expect = require('chai').expect;
 
-var rpc = require('../lib/rpc');
+var rpc = require('../index');
 var parameterNames = rpc.parameterNames;
 var methodsDefinition = rpc.methodsDefinition;
 var response = rpc.response;
