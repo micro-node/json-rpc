@@ -1,5 +1,5 @@
 {
-  "name": "micro-node-rpc",
+  "name": "micro-node-json-rpc",
   "version": "1.0.0",
   "description": "An RPC helper",
   "main": "index.js",
