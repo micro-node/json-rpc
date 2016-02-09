@@ -109,12 +109,63 @@ describe('RPC', function(){
       });
     });
 
+
+    it('should create the right response for function without params', function(done){
+
+      var multimethod = {
+
+        two: function(cb){return cb(null, 2);}
+      };
+
+      var req = {
+
+        jsonrpc: '2.0',
+        method: 'two',
+        id: 1
+      };
+
+      response(multimethod)(req, function(err, resp){
+
+        expect(resp).to.equal(2);
+        done(err);
+      });
+    });
+
     it('should create reply with an invalid request', function(done) {
 
 
       response(function(){})({}, function(err, resp){
 
-        expect(resp.error.code).to.equal(-32600);
+        expect(resp.error.code).to.equal(rpc.INVALIDREQUEST);
+        done();
+      });
+
+    })
+
+    it('should create reply with an methodNotFound', function(done) {
+
+      var multimethod = {
+
+        add: function(a, b, callback){
+
+          return callback(null, a + b);
+        }
+      };
+
+      var req = {
+
+        jsonrpc: '2.0',
+        method: 'do',
+        id: 1,
+        params: {
+          a: 1,
+          b: 2
+        }
+      };
+
+      response(multimethod)(req, function(err, resp){
+
+        expect(resp.error.code).to.equal(rpc.METHODNOTFOUND);
         done();
       });
 
