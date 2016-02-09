@@ -1,6 +1,6 @@
 {
   "name": "micro-node-json-rpc",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "An RPC helper",
   "main": "build/index.js",
   "scripts": {
