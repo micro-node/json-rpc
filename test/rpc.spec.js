@@ -1,7 +1,9 @@
+require('babel-register');
+
 var assert = require('assert');
 var expect = require('chai').expect;
 
-var rpc = require('../index');
+var rpc = require('../lib/rpc');
 var parameterNames = rpc.parameterNames;
 var methodsDefinition = rpc.methodsDefinition;
 var response = rpc.response;
@@ -53,7 +55,6 @@ describe('RPC', function(){
 
 
   describe('Response function', function(){
-
 
     it('should create the right response for array params', function(done){
 
