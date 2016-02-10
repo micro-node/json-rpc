@@ -1,11 +1,12 @@
 {
   "name": "micro-node-json-rpc",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "An RPC helper",
-  "main": "build/index.js",
+  "main": "build/rpc.js",
   "scripts": {
+    "pretest": "npm run build",
     "test": "mocha",
-    "build": "babel lib/rpc.js --out-file ./build/index.js",
+    "build": "babel -d ./build/ ./lib/",
     "lint": "eslint lib/*.js",
     "prepublish": "npm run build"
   },
