@@ -232,6 +232,25 @@ describe('RPC', function(){
       });
     });
 
+    it('should reply with defintion of service', function(done){
+
+      var service = {
+        a: {
+
+          b: {
+
+            c: function(cb){ cb(null, 'd')}
+          }
+        }
+      };
+
+      response(service)({jsonrpc: '2.0', method: rpc.DEFINITIONMETHOD, id: 1}, function(err, resp){
+
+        expect(resp).to.have.deep.property('a.b.c.type').that.equal(rpc.FUNCTIONTYPE);
+        done(err);
+      });
+    });
+
 
     it('should create reply with an invalid request', function(done) {
 
