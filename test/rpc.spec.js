@@ -27,28 +27,44 @@ describe('RPC', function(){
     var multimethod = {
 
       procedure1: function(a,b, callback){},
-      procedure2: function(callback){}
+      procedure2: function(callback){},
+      value: 'hello'
     };
+
+    it('should return definition for a function service', function(){
+
+      var def = methodsDefinition(multimethod.procedure1);
+
+      expect(def).to.have.property('type').that.is.equal(rpc.FUNCTIONTYPE);
+      expect(def).to.have.property('params').that.is.deep.equal(['a', 'b', 'callback']);
+    })
+
+    it('should return definition for a value service', function(){
+
+      var def = methodsDefinition(multimethod.value);
+
+      expect(def).to.have.property('type').that.is.equal(rpc.VALUETYPE);
+      expect(def).to.have.property('value').that.is.equal('hello');
+    })
 
     it('should return definition for Multimethod services', function(){
 
       var def = methodsDefinition(multimethod);
 
-      expect(def).to.have.property('type').that.is.equal('multi-method');
-      expect(def).to.have.property('methods');
-      expect(def.methods).to.deep.equal({'procedure1': {name: 'procedure1', params: ['a', 'b', 'callback']}, 'procedure2' : {name: 'procedure2', params: ['callback']}})
+      expect(def).to.have.property('procedure1');
+      expect(def).to.have.property('procedure2');
+      expect(def).to.have.property('value');
+
+      expect(def.procedure1.type).to.equal(rpc.FUNCTIONTYPE);
+      expect(def.procedure1.params).to.deep.equal(['a', 'b', 'callback']);
+
+      expect(def.procedure2.type).to.equal(rpc.FUNCTIONTYPE);
+      expect(def.procedure2.params).to.deep.equal(['callback']);
+
+      expect(def.value.type).to.equal(rpc.VALUETYPE);
+      expect(def.value.value).to.equal('hello');
 
     });
-
-    it('should return definition for Singlemethod service', function(){
-
-      var def = methodsDefinition(multimethod.procedure1);
-
-      expect(def).to.have.property('type').that.is.equal('single-method');
-      expect(def).to.have.property('methods');
-      expect(def.methods).to.deep.equal({default: {name: 'default', params: ['a', 'b', 'callback']}})
-    })
-
   });
 
 
@@ -129,12 +145,119 @@ describe('RPC', function(){
       });
     });
 
+
+    it('should create the right response for static int values', function(done){
+
+      var service = {
+        int: 2
+      };
+
+
+      response(service)({jsonrpc: '2.0', method: 'int', id: 1}, function(err, resp){
+
+        expect(resp).to.equal(2);
+        done(err);
+      });
+    });
+
+    it('should create the right response for static float values', function(done){
+
+      var service = {
+        float: 2.1
+      };
+
+
+      response(service)({jsonrpc: '2.0', method: 'float', id: 1}, function(err, resp){
+
+        expect(resp).to.equal(2.1);
+        done(err);
+      });
+    });
+
+    it('should create the right response for static string values', function(done){
+
+      var service = {
+        string: 'hello'
+      };
+
+      response(service)({jsonrpc: '2.0', method: 'string', id: 1}, function(err, resp){
+
+        expect(resp).to.equal('hello');
+        done(err);
+      });
+    });
+
+    it('should create the right response for static array values', function(done){
+
+      var service = {
+        array: [1 , '2', {3: 4}]
+      };
+
+      response(service)({jsonrpc: '2.0', method: 'array', id: 1}, function(err, resp){
+
+        expect(resp).to.deep.equal([1 , '2', {3: 4}]);
+        done(err);
+      });
+    });
+
+    it('should create the right response for static boolean values', function(done){
+
+      var service = {
+        true: true
+      };
+
+      response(service)({jsonrpc: '2.0', method: 'true', id: 1}, function(err, resp){
+
+        expect(resp).to.equal(true);
+        done(err);
+      });
+    });
+
+    it('should create the right response for deep objects', function(done){
+
+      var service = {
+        a: {
+
+          b: {
+
+            c: function(cb){ cb(null, 'd')}
+          }
+        }
+      };
+
+      response(service)({jsonrpc: '2.0', method: 'a.b.c', id: 1}, function(err, resp){
+
+        expect(resp).to.equal('d');
+        done(err);
+      });
+    });
+
+
     it('should create reply with an invalid request', function(done) {
 
 
-      response(function(){})({}, function(err, resp){
+      response(function(){})({}, function(err){
 
-        expect(resp.error.code).to.equal(rpc.INVALIDREQUEST);
+        expect(err.code).to.equal(rpc.INVALIDREQUEST);
+        done();
+      });
+
+    })
+
+
+    it('should create reply with an invalid request for not leaf method', function(done) {
+
+      var service = {
+
+        one: {
+
+          two: 1
+        }
+      }
+
+      response(service)({jsonrpc: '2.0',id: 1, method:'one'}, function(err){
+
+        expect(err.code).to.equal(rpc.INVALIDREQUEST);
         done();
       });
 
@@ -161,9 +284,9 @@ describe('RPC', function(){
         }
       };
 
-      response(multimethod)(req, function(err, resp){
+      response(multimethod)(req, function(err){
 
-        expect(resp.error.code).to.equal(rpc.METHODNOTFOUND);
+        expect(err.code).to.equal(rpc.METHODNOTFOUND);
         done();
       });
 

@@ -1,7 +1,7 @@
 {
   "name": "micro-node-json-rpc",
-  "version": "1.0.5",
-  "description": "An RPC helper",
+  "version": "1.0.6",
+  "description": "An RPC response generator for node services",
   "main": "build/rpc.js",
   "scripts": {
     "pretest": "npm run build",
