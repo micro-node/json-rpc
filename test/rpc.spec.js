@@ -88,10 +88,10 @@ describe('RPC', function(){
         id: 1
       };
 
-      response(multimethod)(req, function(err, resp){
+      response(multimethod)(req, function(resp){
 
-        expect(resp).to.equal(2);
-        done(err);
+        expect(resp.result).to.equal(2);
+        done();
       });
     });
 
@@ -116,10 +116,10 @@ describe('RPC', function(){
         }
       };
 
-      response(multimethod)(req, function(err, resp){
+      response(multimethod)(req, function(resp){
 
-        expect(resp).to.equal(3);
-        done(err);
+        expect(resp.result).to.equal(3);
+        done();
       });
     });
 
@@ -138,10 +138,10 @@ describe('RPC', function(){
         id: 1
       };
 
-      response(multimethod)(req, function(err, resp){
+      response(multimethod)(req, function(resp){
 
-        expect(resp).to.equal(2);
-        done(err);
+        expect(resp.result).to.equal(2);
+        done();
       });
     });
 
@@ -153,10 +153,10 @@ describe('RPC', function(){
       };
 
 
-      response(service)({jsonrpc: '2.0', method: 'int', id: 1}, function(err, resp){
+      response(service)({jsonrpc: '2.0', method: 'int', id: 1}, function(resp){
 
-        expect(resp).to.equal(2);
-        done(err);
+        expect(resp.result).to.equal(2);
+        done();
       });
     });
 
@@ -167,10 +167,10 @@ describe('RPC', function(){
       };
 
 
-      response(service)({jsonrpc: '2.0', method: 'float', id: 1}, function(err, resp){
+      response(service)({jsonrpc: '2.0', method: 'float', id: 1}, function(resp){
 
-        expect(resp).to.equal(2.1);
-        done(err);
+        expect(resp.result).to.equal(2.1);
+        done();
       });
     });
 
@@ -180,10 +180,10 @@ describe('RPC', function(){
         string: 'hello'
       };
 
-      response(service)({jsonrpc: '2.0', method: 'string', id: 1}, function(err, resp){
+      response(service)({jsonrpc: '2.0', method: 'string', id: 1}, function(resp){
 
-        expect(resp).to.equal('hello');
-        done(err);
+        expect(resp.result).to.equal('hello');
+        done();
       });
     });
 
@@ -193,10 +193,10 @@ describe('RPC', function(){
         array: [1 , '2', {3: 4}]
       };
 
-      response(service)({jsonrpc: '2.0', method: 'array', id: 1}, function(err, resp){
+      response(service)({jsonrpc: '2.0', method: 'array', id: 1}, function(resp){
 
-        expect(resp).to.deep.equal([1 , '2', {3: 4}]);
-        done(err);
+        expect(resp.result).to.deep.equal([1 , '2', {3: 4}]);
+        done();
       });
     });
 
@@ -206,10 +206,10 @@ describe('RPC', function(){
         true: true
       };
 
-      response(service)({jsonrpc: '2.0', method: 'true', id: 1}, function(err, resp){
+      response(service)({jsonrpc: '2.0', method: 'true', id: 1}, function(resp){
 
-        expect(resp).to.equal(true);
-        done(err);
+        expect(resp.result).to.equal(true);
+        done();
       });
     });
 
@@ -225,10 +225,10 @@ describe('RPC', function(){
         }
       };
 
-      response(service)({jsonrpc: '2.0', method: 'a.b.c', id: 1}, function(err, resp){
+      response(service)({jsonrpc: '2.0', method: 'a.b.c', id: 1}, function(resp){
 
-        expect(resp).to.equal('d');
-        done(err);
+        expect(resp.result).to.equal('d');
+        done();
       });
     });
 
@@ -244,10 +244,10 @@ describe('RPC', function(){
         }
       };
 
-      response(service)({jsonrpc: '2.0', method: rpc.DEFINITIONMETHOD, id: 1}, function(err, resp){
+      response(service)({jsonrpc: '2.0', method: rpc.DEFINITIONMETHOD, id: 1}, function(resp){
 
-        expect(resp).to.have.deep.property('a.b.c.type').that.equal(rpc.FUNCTIONTYPE);
-        done(err);
+        expect(resp.result).to.have.deep.property('a.b.c.type').that.equal(rpc.FUNCTIONTYPE);
+        done();
       });
     });
 
@@ -255,9 +255,9 @@ describe('RPC', function(){
     it('should create reply with an invalid request', function(done) {
 
 
-      response(function(){})({}, function(err){
+      response(function(){})({}, function(resp){
 
-        expect(err.code).to.equal(rpc.INVALIDREQUEST);
+        expect(resp.error.code).to.equal(rpc.INVALIDREQUEST);
         done();
       });
 
@@ -274,9 +274,9 @@ describe('RPC', function(){
         }
       }
 
-      response(service)({jsonrpc: '2.0',id: 1, method:'one'}, function(err){
+      response(service)({jsonrpc: '2.0',id: 1, method:'one'}, function(resp){
 
-        expect(err.code).to.equal(rpc.INVALIDREQUEST);
+        expect(resp.error.code).to.equal(rpc.INVALIDREQUEST);
         done();
       });
 
@@ -303,9 +303,9 @@ describe('RPC', function(){
         }
       };
 
-      response(multimethod)(req, function(err){
+      response(multimethod)(req, function(resp){
 
-        expect(err.code).to.equal(rpc.METHODNOTFOUND);
+        expect(resp.error.code).to.equal(rpc.METHODNOTFOUND);
         done();
       });
 
