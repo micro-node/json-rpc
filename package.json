@@ -1,6 +1,6 @@
 {
   "name": "micro-node-json-rpc",
-  "version": "1.0.9",
+  "version": "1.1.0",
   "description": "An RPC response generator for node services",
   "main": "build/rpc.js",
   "scripts": {
@@ -32,7 +32,8 @@
   },
   "homepage": "https://github.com/micro-node/rpc#readme",
   "dependencies": {
-    "lodash": "^3.10.1"
+    "lodash": "^3.10.1",
+    "serialize-error": "^1.1.0"
   },
   "devDependencies": {
     "babel-cli": "^6.5.1",
